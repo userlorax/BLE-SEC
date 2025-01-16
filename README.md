@@ -1,111 +1,133 @@
 # BLE-SEC
 
-## Representative Phrase
+## Overview
 
-"Intelligent infrastructure based on LoRaWAN and ESP32 for Bluetooth device detection and people flow analysis, enhancing urban safety."
-
----
-
-## Introduction
-
-Accelerated urbanization has increased pedestrian traffic and, consequently, security risks in cities. BLE-SEC addresses this challenge by detecting and anonymously tracking Bluetooth devices, enabling the identification of suspicious behavior patterns. This system, based on low-power and long-range technology, is designed to proactively improve urban safety.
+This project provides a **BLE device detection and logging system** designed to track and manage Bluetooth Low Energy (BLE) devices. It is particularly useful for applications like access control, crowd monitoring, and urban security. Our focus is on delivering a Python-based **data collector script** that logs BLE devices' entry and exit events into a database.
 
 ---
 
-## Key Technologies
+## How It Works
 
-1. **ESP32**: Bluetooth (BLE) device detection.
-2. **LoRaWAN**: Long-distance data transmission with low power consumption.
-3. **Data Analysis Algorithms**: Identifying suspicious patterns in the data.
-4. **SQLite Databases**: Real-time event logging and querying.
+The system operates using two primary components:
+
+### 1. **BLE Detection Script** (Runs on ESP32)
+
+This script is deployed on an **ESP32** microcontroller to scan for nearby BLE devices. It captures:
+
+- **MAC Address**: Unique identifier of the device.
+    
+- **RSSI (Received Signal Strength Indicator)**: Measures signal strength to estimate proximity.
+    
+- **Node ID**: Identifies the scanning node if multiple are used.
+    
+
+The detected data is sent via serial communication to the data collector for processing.
+
+### 2. **Data Collector Script** (Python)
+
+Our **data collector script** runs on a computer or server and processes the data from the ESP32. It manages the logic to determine whether a device is entering or exiting the monitored area and logs this information into an SQLite database.
+
+#### Key Features:
+
+- **Entry and Exit Logic**: Based on the RSSI value trends:
+    
+    - A new device detected is marked as "ENTRY."
+        
+    - A device no longer detected is marked as "EXIT."
+        
+- **Real-Time Processing**: Continuously updates the database with live device activity.
+    
+- **Database Logging**: Stores details such as MAC Address, RSSI, timestamp, and action.
+    
 
 ---
 
-## Project Structure
+## Provided Components
 
-### Directories and Files
+We provide the **Python-based data collector script**, which includes:
 
-```plaintext
-BLE-SEC/
-├── README.md               # Project introduction and summary.
-├── docs/                   # Theoretical and technical documentation.
-│   ├── PracticoProyecto.md # Practical information.
-│   ├── TeoricoProyecto.md  # Theoretical information.
-├── src/                    # Project source code.
-│   ├── nodos_lora/         # Code related to LoRa nodes.
-│   │   ├── nodos_lora.ino  # LoRa nodes code.
-│   ├── script_recolector/  # Scripts for data collection and processing.
-│       ├── recolector.py   # Python data collector script.
-├── db/                     # Project SQLite databases.
-│   ├── device_detection.db # Device detection database.
-├── diagrams/               # Technical diagrams and schemes.
-│   ├── flujo_trabajo.png   # BLE-SEC workflow diagram.
-├── LICENSE                 # Project license.
-├── .gitignore              # Files and folders to ignore by Git.
-```
+1. **Real-Time BLE Device Processing**:
+    
+    - Reads data from an ESP32 via a serial port.
+        
+    - Implements entry and exit logic.
+        
+2. **Database Integration**:
+    
+    - Uses SQLite to log detected devices and their activities.
+        
+3. **Visualization**:
+    
+    - Displays detected devices and recent database logs in real time using a terminal-based interface.
+        
+
+> **Note**: The BLE detection script for ESP32 is not included but can be easily implemented following examples available online. The focus of this project is on providing the data processing and storage layer.
 
 ---
 
-## Getting Started
+## Usage Instructions
 
 ### Requirements
 
 - **Hardware**:
     
-    - ESP32.
-    - LoRa modules.
-    - Antennas and power sources.
+    - ESP32 with BLE scanning capabilities.
+        
+    - USB connection to a computer.
+        
 - **Software**:
     
-    - Arduino IDE (for programming ESP32).
-    - Python 3.x (for running collector scripts).
-    - SQLite (for managing databases).
+    - Python 3.x
+        
+    - Required Python libraries (see below).
+        
 
 ### Installation
 
-1. **Clone the repository**:
     
-    ```bash
-    git clone https://github.com/userlorax/BLE-SEC.git
-    cd BLE-SEC
+1. Install dependencies:
+    
     ```
-    
-2. **Set up the development environment**:
-    
-    - Install the required libraries for Arduino and ESP32.
-        
-    - Install Python dependencies
-        
-        
-3. **Upload code to LoRa nodes**:
-    
-    - Use the `src/nodos_lora/nodos_lora.ino` file to configure ESP32 devices.
-4. **Run the data collector script**:
-    
-    - Execute `src/script_recolector/recolector.py` to collect and log data into the SQLite database.
+    pip install pyserial sqlite3 curses
+    ```
 
 ---
 
-## Contribution
+## Example Database Schema
 
-1. Fork the repository.
+The SQLite database includes the following table:
+
+`**device_log**`:
+
+- `id`: Unique identifier.
     
-2. Create a branch for your changes:
+- `nodo`: Node ID where the device was detected.
     
-    ```bash
-    git checkout -b feature/new_feature
-    ```
+- `mac_address`: BLE device's MAC Address.
     
-3. Submit a Pull Request explaining your changes.
+- `rssi`: Signal strength of the detected device.
+    
+- `timestamp`: Date and time of detection.
+    
+- `action`: `ENTRY` or `EXIT`.
+    
+
+---
+
+## Use Cases
+
+- **Access Control**: Track authorized devices entering or exiting a secure area.
+    
+- **Crowd Monitoring**: Analyze movement patterns of people carrying BLE-enabled devices.
+    
+- **Urban Security**: Detect unusual or suspicious movement in public spaces.
     
 
 ---
 
 ## License
 
-This project is licensed under the Non-Commercial Use License.  
-You are free to use, modify, and distribute this project **for non-commercial purposes**.  
-For commercial use, please contact us.
-
+This project is licensed under a Non-Commercial Use License. You may use, modify, and distribute the software for **non-commercial purposes only**.
 
 ---
+
