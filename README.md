@@ -74,11 +74,8 @@ BLE-SEC/
     
     - Install the required libraries for Arduino and ESP32.
         
-    - Install Python dependencies:
+    - Install Python dependencies
         
-        ```bash
-        pip install -r requirements.txt
-        ```
         
 3. **Upload code to LoRa nodes**:
     
