@@ -106,6 +106,9 @@ BLE-SEC/
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the Non-Commercial Use License.  
+You are free to use, modify, and distribute this project **for non-commercial purposes**.  
+For commercial use, please contact us.
+
 
 ---
